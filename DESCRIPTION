@@ -1,0 +1,15 @@
+Package: rlabsois
+Type: Package
+Title: Interactive R labs to accompany the lecture Statistics for BA
+Version: 0.1.0
+Author: person("Haug", "Stephan", email = "haug@tum.de")
+Maintainer: Stephan Haug <haug@tum.de>
+Description: This package contains a series of R labs written using the learnr packags. The content 
+    of the labs is based on the R labs from the open intro to statistics project.
+License: CC BY-SA 3.0
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    learnr,
+    ggplot2,
+    dplyr
