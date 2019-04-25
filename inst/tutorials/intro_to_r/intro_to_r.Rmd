@@ -7,7 +7,7 @@ runtime: shiny_prerendered
 ```{r setup, include=FALSE}
 library(learnr)
 knitr::opts_chunk$set(exercise.completion = FALSE)
-source("http://www.openintro.org/stat/data/arbuthnot.R")
+
 
 ```
 
@@ -64,6 +64,8 @@ in a computer lab, in the library, or in your dorm room; anywhere you have
 access to the Internet.
 
 ## The Data: Dr. Arbuthnot's Baptism Records
+
+
 
 The Arbuthnot data set refers to Dr. John Arbuthnot, an 18<sup>th</sup> century 
 physician, writer, and mathematician.  He was interested in the ratio of newborn
@@ -139,7 +141,15 @@ This command shows the number of boys baptized each year.
 
 What command would you use to extract just the counts of girls baptized? Try it!
 
-```{r view-girls, exercise = TRUE}
+```{r view-girls-setup}
+
+source("http://www.openintro.org/stat/data/present.R")
+
+```
+
+
+```{r view-girls, exercise = TRUE, exercise.eval=TRUE}
+
 
 ```
 
@@ -264,6 +274,12 @@ the number of boys to the number of girls baptized in 1629 with
 
 Compute the ratio of the number of boys to the number of girls baptized for all years
 
+```{r calc-prop-boys-to-girls-vars-setup}
+source("http://www.openintro.org/stat/data/present.R")
+```
+
+
+
 ```{r calc-prop-boys-to-girls-vars, exercise = TRUE}
 
 ```
@@ -289,7 +305,7 @@ division, then the addition, giving you something that is not a proportion.
 
 Make a scatterplot of the proportion of newborns that are boys over time.
 
-```{r newborn-prop-boys, exercise = TRUE}
+```{r newborn-prop-boys, exercise = TRUE, exercise.setup="arbuthnot-data"}
 
 ```
 
