@@ -154,7 +154,7 @@ What command would you use to extract just the counts of girls baptized? Try it!
 
 ```{r view-girls-setup}
 
-source("http://www.openintro.org/stat/data/present.R")
+source("http://www.openintro.org/stat/data/arbuthnot.R")
 
 ```
 
@@ -285,7 +285,7 @@ the number of boys to the number of girls baptized in 1629 with
 Compute the ratio of the number of boys to the number of girls baptized for all years
 
 ```{r calc-prop-boys-to-girls-vars-setup}
-source("http://www.openintro.org/stat/data/present.R")
+source("http://www.openintro.org/stat/data/arbuthnot.R")
 ```
 
 
