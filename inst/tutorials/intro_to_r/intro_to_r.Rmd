@@ -148,8 +148,6 @@ This command shows the number of boys baptized each year.
 
 #### Exercise
 
-**This doesn't work at all**
-
 What command would you use to extract just the counts of girls baptized? Try it!
 
 ```{r view-girls-setup}
