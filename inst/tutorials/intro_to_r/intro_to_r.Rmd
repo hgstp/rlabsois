@@ -1,13 +1,17 @@
 ---
 title: "Introduction to R and RStudio"
-output: learnr::tutorial
+output: 
+  learnr::tutorial:
+    allow_skip: true
 runtime: shiny_prerendered
 ---
 
 ```{r setup, include=FALSE}
 library(learnr)
+library(tidyverse)
 knitr::opts_chunk$set(exercise.completion = FALSE)
 
+knitr::opts_chunk$set(error = TRUE)
 
 ```
 
@@ -62,6 +66,11 @@ computation or some analysis you have performed. Note that because you are
 accessing data from the web, this command (and the entire assignment) will work 
 in a computer lab, in the library, or in your dorm room; anywhere you have 
 access to the Internet.
+
+
+
+
+
 
 ## The Data: Dr. Arbuthnot's Baptism Records
 
@@ -148,8 +157,7 @@ source("http://www.openintro.org/stat/data/present.R")
 ```
 
 
-```{r view-girls, exercise = TRUE, exercise.eval=TRUE}
-
+```{r view-girls, exercise = TRUE}
 
 ```
 
@@ -220,7 +228,7 @@ quiz(caption= "Trend?",
      question("Is there an apparent trend in the number of girls baptized over the years?",
   answer("yes", correct = TRUE),
   answer("no")),
-  question("How would you describe it?",
+  question("How would you describe it? (select ALL answers that might apply)",
            answer("no trend"),
            answer("linear trend", correct = TRUE),
            answer("linear trend with breaks", correct = TRUE),
@@ -305,7 +313,12 @@ division, then the addition, giving you something that is not a proportion.
 
 Make a scatterplot of the proportion of newborns that are boys over time.
 
-```{r newborn-prop-boys, exercise = TRUE, exercise.setup="arbuthnot-data"}
+```{r newborn-prop-boys-setup}
+library(ggplot2)
+```
+
+
+```{r newborn-prop-boys, exercise = TRUE}
 
 ```
 
