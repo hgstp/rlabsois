@@ -175,7 +175,7 @@ Notice how R automatically divides all entries in the table by 20,000 in the
 command above. This is similar to something we observed in the Introduction to R;
 when we multiplied or divided a vector with a number, R applied that action across 
 entries in the vectors. As we see above, this also works for tables. Next, we 
-want to make a bar plot of the entries in the table by using `geom_barplot()`
+want to make a bar plot of the entries in the table by using `geom_bar()`
 
 ```{r table-smoke-barplot}
 ggplot(cdc, aes(x = smoke100)) + geom_bar()
@@ -504,7 +504,13 @@ very simple expressions.
 
 Create box plots of the `bmi` values for each group  in the variable `genhlth`.
 
-```{r boxplot-bmi, exercise = TRUE}
+
+```{r prepare-bmi}
+cdc <- mutate(cdc, bmi = (weight / height^2) * 703)
+```
+
+
+```{r boxplot-bmi, exercise = TRUE, exercise.setup = "prepare-bmi"}
 
 
 ```
@@ -517,7 +523,7 @@ ggplot(cdc, aes(x = genhlth, y = bmi)) + geom_boxplot()
 Finally, let's make some histograms. We can look at the histogram for the age of
 our respondents with the command
 
-```{r hist-age}
+```{r hist-age, message=FALSE}
 ggplot(cdc, aes(x = age)) + geom_histogram()
 
 ```
