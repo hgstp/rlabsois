@@ -247,8 +247,8 @@ outcomes <- c("H", "M")
 
 ```{r sim-basket-solution}
 sim_basket <- sample(outcomes, size = 133, replace = TRUE, prob = c(0.45, 0.55))
-
-table(sim_basket) # just to see the distribution, not part of the solution
+# just to see the distribution, not part of the solution
+table(sim_basket) 
 ```
 
 
