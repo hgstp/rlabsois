@@ -170,6 +170,10 @@ Make a normal probability plot of `sim_norm`.  Do all of the points fall on
     data?
 
 ```{r sim-norm-qq-setup}
+hgt_mean_sd <- bdims %>%
+   filter(sex == 0) %>%
+   summarise(mean = mean(hgt, na.rm = TRUE),
+             sd = sd(hgt, na.rm = TRUE))
 sim_norm <- data.frame(
   hgt = rnorm(n = sum(bdims$sex == 0), 
                   mean = hgt_mean_sd$mean, sd = hgt_mean_sd$sd)
