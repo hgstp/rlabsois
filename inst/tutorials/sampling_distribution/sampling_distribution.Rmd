@@ -94,7 +94,7 @@ Describe the distribution of this sample. How does it compare to the
     distribution of the population?
 
 
-```{r samp1-setup}
+```{r samp1-dist-setup}
 set.seed(190528)
 samp1 <- data.frame(area = sample(ames$Gr.Liv.Area, 50))
 ```
