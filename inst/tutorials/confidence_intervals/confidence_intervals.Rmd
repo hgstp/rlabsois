@@ -16,8 +16,6 @@ knitr::opts_chunk$set(error = TRUE)
 download.file("http://www.openintro.org/stat/data/ames.RData", destfile = "ames.RData")
 load("ames.RData")
 
-library(tidyverse)
-
 ```
 
 
@@ -98,7 +96,7 @@ sample using,
 Return for a moment to the question that first motivated this lab: based on 
 this sample, what can we infer about the population? Based only on this single 
 sample, the best estimate of the average living area of houses sold in Ames 
-would be the sample mean, usually denoted as $\bar{x}$ (here we're calling it 
+would be the sample mean, usually denoted as $\overline{x}$ (here we're calling it 
 `sample_mean`). That serves as a good *point estimate* but it would be useful 
 to also communicate how uncertain we are of that estimate. This can be 
 captured by using a *confidence interval*.
