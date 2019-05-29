@@ -17,7 +17,9 @@ download.file("http://www.openintro.org/stat/data/ames.RData", destfile = "ames.
 load("ames.RData")
 
 library(tidyverse)
+
 ```
+
 ---
 
 ## Sampling from Ames, Iowa
