@@ -158,6 +158,7 @@ Ames? Use `<=` and `&` to check if the population mean is covered by you confide
 ```{r ci-popmean-setup}
 set.seed(19053)
 samp <- data.frame(area = sample(ames$Gr.Liv.Area, 60))
+sample_mean <- mean(samp$area)
 se <- sd(samp$area) / sqrt(60)
 lower <- sample_mean - 1.96 * se
 upper <- sample_mean + 1.96 * se
