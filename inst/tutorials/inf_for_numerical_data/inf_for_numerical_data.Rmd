@@ -216,6 +216,61 @@ t.test(weight ~ habit, conf.level = 0.99, data = nc)$conf.int
 ```
 
 
+
+## Inference using infer
+
+Given this setting, we could also use the bootstrap distribution to conduct the hypothesis test. This can be done using the `infer` package. We begin by computing the observed statistic (difference in means):
+
+```{r, warning=FALSE}
+library(infer)
+t <- nc %>% 
+  specify(weight ~ habit) %>% 
+  calculate(stat = "diff in means", 
+            order = c("nonsmoker", "smoker"))
+t
+```
+
+
+
+We can use the idea of permutation testing to simulate the population from which the sample came (under the assumption of indepence between `weight` and `habit`).
+
+
+```{r, warning=FALSE}
+set.seed(201906)
+null_dist <- nc %>% 
+  specify(weight ~ habit) %>%  
+  hypothesize(null = "independence") %>% 
+  generate(reps = 1000) %>% 
+  calculate(stat = "diff in means",
+            order = c("nonsmoker", "smoker"))
+
+```
+
+
+Now we can use this distribution to determine a p-value. Recall this is a two-sided test, so our p-value will be the probability
+
+$$P_{H_0}(T< `r as.numeric(t)` \cup T > `r as.numeric(t)`)\,,$$
+where $T$ is the test statistic, which is defined as the difference between the sample mean of weight in group `nonsmokers` and in group `smokers`. 
+
+The simulation-based null distribution is visualised in the next plot. The red vertical
+line marks the observed test statistic value and the shaded red area characterises the p-value (size of the area, which overlaps the distribution).
+
+```{r}
+null_dist %>% 
+  visualize() + shade_p_value(obs_stat = t, direction = "two_sided")
+
+```
+
+The actual value is computed with the following command
+
+```{r}
+null_dist %>% 
+  get_pvalue(obs_stat = t, direction = "two_sided")
+
+```
+
+It is slightly higher than the p-value using the normal approximation, but still the null hypothesis will be rejected at the 5% level. You can also see this from the histogram above that we are not very far into the tail of the null distribution.
+
 * * *
 
 ## On your own
