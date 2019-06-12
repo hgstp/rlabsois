@@ -198,7 +198,7 @@ variables `weight` and `habit`.
 #### Exercise
 
 Use the function `t.test()` to compute a two sided 99% confidence interval for the 
-difference  $\mu_{\text{non smoking mums}} - \mu_{\text{smoking mums}}$. Can you
+difference  $\mu_{\text{non smoking mums}} - \mu_{\text{smoking mums}}$ - take a look at `?t.test` to figure out how to adjust the confidence level. Can you
 reject the null hypothesis at the significance level 0.01?
 
 
@@ -207,10 +207,6 @@ reject the null hypothesis at the significance level 0.01?
 
 ```
 
-```{r weight-ci-hint}
-# take a look at the help of t.test
-?t.test
-```
 
 
 ```{r weight-ci-solution}
@@ -218,7 +214,6 @@ t.test(weight ~ habit, conf.level = 0.99, data = nc)$conf.int
 
 # the null can't be rejected, since the interval covers 0
 ```
-
 
 
 * * *
