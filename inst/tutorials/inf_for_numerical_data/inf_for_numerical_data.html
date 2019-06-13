@@ -104,7 +104,7 @@ load(&quot;nc.RData&quot;)</code></pre>
 </tr>
 <tr class="even">
 <td><code>lowbirthweight</code></td>
-<td>whether baby was classified as low birthweight (<code>low</code>) or not (<code>not low</code>).</td>
+<td>whether baby was classified as low birth weight (<code>low</code>) or not (<code>not low</code>).</td>
 </tr>
 <tr class="odd">
 <td><code>gender</code></td>
@@ -271,7 +271,7 @@ t</code></pre>
 {"columns":[{"label":["stat"],"name":[1],"type":["dbl"],"align":["right"]}],"data":[{"1":"0.3155425"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
-<p>We can use the idea of permutation testing to simulate the population from which the sample came (under the assumption of indepence between <code>weight</code> and <code>habit</code>).</p>
+<p>We can use the idea of permutation testing to simulate the population from which the sample came (under the assumption of independence between <code>weight</code> and <code>habit</code>).</p>
 <pre class="r"><code>set.seed(201906)
 null_dist &lt;- nc %&gt;% 
   specify(weight ~ habit) %&gt;%  
@@ -295,6 +295,45 @@ null_dist &lt;- nc %&gt;%
   </script>
 </div>
 <p>It is slightly higher than the p-value using the normal approximation, but still the null hypothesis will be rejected at the 5% level. You can also see this from the histogram above that we are not very far into the tail of the null distribution.</p>
+</div>
+<div id="section-anova" class="section level2">
+<h2>ANOVA</h2>
+<p>In the last part we want to run an ANOVA test. We are still interested in the birth <code>weight</code>, but now we want to analyse the influence of the number of hospital visits on it. The number of hospital visits is a numeric variable. So, we need to categorise it to run an ANOVA test. This can be done e.g. with the function <code>cut_number()</code> from <code>ggplot2</code>. First we want to use it in combination with <code>geom_boxplot()</code> to analyse the influence graphically.</p>
+<pre class="r"><code>ggplot(nc, aes(x = visits, y = weight)) + 
+  geom_boxplot(aes(group = cut_number(visits, 3)))</code></pre>
+<pre><code>## Warning: Removed 9 rows containing missing values (stat_boxplot).</code></pre>
+<p><img src="inf_for_numerical_data_files/figure-html/unnamed-chunk-5-1.png" width="624" /></p>
+<p>In the graphic we categorised <code>visits</code> into three groups of roughly the same size.</p>
+<pre class="r"><code>table(cut_number(nc$visits, 3))</code></pre>
+<pre><code>## 
+##  [0,11] (11,14] (14,30] 
+##     400     321     270</code></pre>
+<p>As we can see, the interval for group <code>(11,14]</code> is much shorter than for the other two. For this group we can also observe the highest median, but it seems that all three medians are pretty close together. Nevertheless, we want to analyse this difference. The variability within each group seems to be the same. The ANOVA table then looks like this:</p>
+<pre class="r"><code>anova(lm(weight ~ cut_number(visits, 3), data = nc))</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Df"],"name":[1],"type":["int"],"align":["right"]},{"label":["Sum Sq"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["Mean Sq"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["F value"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Pr(>F)"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"2","2":"56.87089","3":"28.435445","4":"13.1542","5":"2.301118e-06","_rn_":"cut_number(visits, 3)"},{"1":"988","2":"2135.76012","3":"2.161701","4":"NA","5":"NA","_rn_":"Residuals"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>We observe a large F value, which indicates a significant effect of the categorised number of visits on the birth weight. This is confirmed by the corresponding p-value, which is very small.</p>
+<p>Since we didn’t expect any significant differences, we are definitely unsure about which groups differ regarding their mean value. This can be analysed by a pairwise comparison and the Bonferroni adjustment. One way to do so, is using the function <code>pairwise.t.test()</code>.</p>
+<pre class="r"><code>pairwise.t.test(nc$weight, cut_number(nc$visits, 3), p.adjust.method = &quot;bonf&quot;)</code></pre>
+<pre><code>## 
+##  Pairwise comparisons using t tests with pooled SD 
+## 
+## data:  nc$weight and cut_number(nc$visits, 3) 
+## 
+##         [0,11]  (11,14]
+## (11,14] 1.6e-06 -      
+## (14,30] 0.0088  0.2509 
+## 
+## P value adjustment method: bonferroni</code></pre>
+<p>The pairwise t-test lead to the conclusion that the groups <code>[0,11]</code> and <code>(11,14]</code> as well as <code>[0,10]</code> and <code>(14,30]</code> show a significant difference regarding their mean value.</p>
+<p><em>Remarks:</em></p>
+<ol style="list-style-type: decimal">
+<li><p>To compute the values for the ANOVA table we used the function <code>lm()</code> for fitting regression models. In Chapter 7 we will explain in more detail how to use this function.</p></li>
+<li><p>In the pairwise t-test we used the Bonferroni adjustment. This is one of several adjustment methods. It is the simplest but most conservative one. But since the others are beyond the scope of this course, we will just use the Bonferroni method.</p></li>
+</ol>
 <hr />
 </div>
 <div id="section-on-your-own" class="section level2">
@@ -302,7 +341,7 @@ null_dist &lt;- nc %&gt;%
 <ul>
 <li><p>Calculate a 95% confidence interval for the average length of pregnancies (<code>weeks</code>) and interpret it in context. Note that since you’re doing inference on a single population parameter, you can’t use the formula notation in <code>t.test()</code>.</p></li>
 <li><p>Conduct a hypothesis test evaluating whether the average weight gained by younger mothers is different than the average weight gained by mature mothers.</p></li>
-<li><p>Now, a non-inference task: Determine the age cutoff for younger and mature mothers. Use a method of your choice, and explain how your method works.</p></li>
+<li><p>Now, a non-inference task: Determine the age cut-off for younger and mature mothers. Use a method of your choice, and explain how your method works.</p></li>
 </ul>
 <div id="section-license">
 <p>This tutorial is released under a <a href="http://creativecommons.org/licenses/by-sa/3.0">Creative Commons Attribution-ShareAlike 3.0 Unported</a>. This lab was adapted from an OpenIntro R Lab by Andrew Bray and Mine Çetinkaya-Rundel.</p>

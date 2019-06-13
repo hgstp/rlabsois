@@ -52,7 +52,7 @@ variable         | description
 `marital`        | whether mother is `married` or `not married` at birth.
 `gained`         | weight gained by mother during pregnancy in pounds.
 `weight`         | weight of the baby at birth in pounds.
-`lowbirthweight` | whether baby was classified as low birthweight (`low`) or not (`not low`).
+`lowbirthweight` | whether baby was classified as low birth weight (`low`) or not (`not low`).
 `gender`         | gender of the baby, `female` or `male`.
 `habit`          | status of the mother as a `nonsmoker` or a `smoker`.
 `whitemom`       | whether mom is `white` or `not white`.
@@ -232,7 +232,7 @@ t
 
 
 
-We can use the idea of permutation testing to simulate the population from which the sample came (under the assumption of indepence between `weight` and `habit`).
+We can use the idea of permutation testing to simulate the population from which the sample came (under the assumption of independence between `weight` and `habit`).
 
 
 ```{r, warning=FALSE}
@@ -271,6 +271,47 @@ null_dist %>%
 
 It is slightly higher than the p-value using the normal approximation, but still the null hypothesis will be rejected at the 5% level. You can also see this from the histogram above that we are not very far into the tail of the null distribution.
 
+
+## ANOVA
+
+In the last part we want to run an ANOVA test. We are still interested in the birth `weight`, but now we want to analyse the influence of the number of hospital visits on it. The number of hospital visits is a numeric variable. So, we need to categorise it to run an ANOVA test. This can be done e.g. with the function `cut_number()` from `ggplot2`. First we want to use it in combination with `geom_boxplot()` to analyse the influence graphically.
+
+```{r, tidy=FALSE}
+ggplot(nc, aes(x = visits, y = weight)) + 
+  geom_boxplot(aes(group = cut_number(visits, 3)))
+```
+
+In the graphic we categorised `visits` into three groups of roughly the same size. 
+
+```{r}
+table(cut_number(nc$visits, 3))
+```
+
+
+As we can see, the interval for group `(11,14]` is much shorter than for the other two. For this group we can also observe the highest median, but it seems that all three medians are pretty close together. Nevertheless, we want to analyse this difference. The variability within each group seems to be the same. The ANOVA table then looks like this:
+
+```{r}
+anova(lm(weight ~ cut_number(visits, 3), data = nc))
+```
+
+We observe a large F value, which indicates a significant effect of the categorised number of visits on the birth weight. This is confirmed by the corresponding p-value, which is very small.
+
+Since we didn't expect any significant differences, we are definitely unsure about which groups differ regarding their mean value. This can be analysed by a pairwise comparison and the Bonferroni adjustment. One way to do so, is using the function `pairwise.t.test()`.
+
+```{r}
+pairwise.t.test(nc$weight, cut_number(nc$visits, 3), p.adjust.method = "bonf")
+```
+
+The pairwise t-test lead to the conclusion that the groups `[0,11]` and `(11,14]` as well as `[0,10]` and `(14,30]` show a significant difference regarding their mean value.
+
+
+*Remarks:*
+ 
+ 1. To compute the values for the ANOVA table we used the function `lm()` for fitting regression models. In Chapter 7 we will explain in more detail how to use this function.
+ 
+ 2. In the pairwise t-test we used the Bonferroni adjustment. This is one of several adjustment methods. It is the simplest but most conservative one. But since the others are beyond the scope of this course, we will just use the Bonferroni method.
+ 
+ 
 * * *
 
 ## On your own
@@ -283,7 +324,7 @@ on a single population parameter, you can't use the formula notation in `t.test(
 -   Conduct a hypothesis test evaluating whether the average weight gained by 
 younger mothers is different than the average weight gained by mature mothers.
 
--   Now, a non-inference task: Determine the age cutoff for younger and mature 
+-   Now, a non-inference task: Determine the age cut-off for younger and mature 
 mothers. Use a method of your choice, and explain how your method works.
 
 
